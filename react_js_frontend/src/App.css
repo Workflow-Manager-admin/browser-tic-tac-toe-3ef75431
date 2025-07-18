@@ -1,104 +1,329 @@
-/* CSS Variables for Theme Management */
 :root {
-  /* Light theme colors */
-  --bg-primary: #ffffff;
+  /* Theme Colors */
+  --ttt-primary: #1976D2;
+  --ttt-secondary: #424242;
+  --ttt-accent: #E53935;
+
+  --bg-primary: #fff;
   --bg-secondary: #f8f9fa;
+  --bg-board: #fff;
+  --bg-square-hover: #f4f6fa;
+
   --text-primary: #282c34;
-  --text-secondary: #61dafb;
+  --text-secondary: #8995ad;
+  --text-accent: #E53935;
+  --text-x: #E53935;
+  --text-o: #1976D2;
+  --text-win: #1976D2;
+  --text-draw: #424242;
+
   --border-color: #e9ecef;
-  --button-bg: #007bff;
-  --button-text: #ffffff;
+  --square-border: #d2dde8;
+  --square-shadow: 0 1px 4px #aabed799;
+
+  --btn-bg: #1976d2;
+  --btn-bg-hover: #125baa;
+  --btn-accent: #E53935;
+  --btn-bg-secondary: #424242;
+  --btn-bg-secondary-hover: #23272B;
+  --btn-text: #fff;
+
+  --score-x: #E53935;
+  --score-o: #1976D2;
+  --scoreboard-bg: #f3f6fa;
+
+  --footer-color: #aeb3be;
 }
 
-[data-theme="dark"] {
-  /* Dark theme colors */
-  --bg-primary: #1a1a1a;
-  --bg-secondary: #282c34;
-  --text-primary: #ffffff;
-  --text-secondary: #61dafb;
-  --border-color: #404040;
-  --button-bg: #0056b3;
-  --button-text: #ffffff;
-}
-
+/* -- Main App Styling -- */
+.tictactoe-app-root,
 .App {
-  text-align: center;
-  background-color: var(--bg-primary);
+  min-height: 100vh;
+  background: var(--bg-primary);
   color: var(--text-primary);
-  min-height: 100vh;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: var(--bg-secondary);
-  min-height: 100vh;
+.ttt-main {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: var(--text-primary);
-  transition: background-color 0.3s ease;
+  min-height: 100vh;
+  width: 100vw;
+  gap: 2.3rem;
+  background: var(--bg-primary);
+}
+
+.ttt-title {
+  font-size: 2.7rem;
+  font-weight: 700;
+  letter-spacing: -1.5px;
+  color: var(--ttt-secondary);
+  margin-top: 1rem;
+  margin-bottom: 0.2em;
+}
+
+/* Scoreboard styles */
+.ttt-scoreboard {
+  background: var(--scoreboard-bg);
+  border-radius: 1.2em;
+  padding: 0.28em 1.5em 0.25em 1.5em;
+  font-size: 1.1rem;
+  font-family: 'Segoe UI', 'Roboto', sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  box-shadow: 0 3px 20px #c9d2e455;
+  display: flex;
+  align-items: center;
+  gap: 1.3em;
+  margin-bottom: 0.5em;
+  margin-top: 0.1em;
+}
+.score-x {
+  color: var(--score-x);
+  font-weight: 700;
+}
+.score-o {
+  color: var(--score-o);
+  font-weight: 700;
+}
+.score-sep {
+  color: var(--scoreboard-bg);
+  font-size: 1.6em;
+  user-select: none;
+}
+.score-value {
+  background: none;
+  padding: 0 0.3em;
+  min-width: 2ch;
+  display: inline-block;
+  font-size: 1.25em;
+  font-weight: 800;
+}
+
+/* Status display */
+.ttt-status {
+  color: var(--ttt-secondary);
+  font-size: 1.25rem;
+  font-weight: 500;
+  min-height: 2.3em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.1em;
+}
+
+/* Game Board grid styling */
+.ttt-board {
+  margin: 2vh 0 0 0;
+  width: 330px;
+  height: 330px;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  background: var(--bg-board);
+  border-radius: 18px;
+  border: 2px solid var(--border-color);
+  box-shadow: var(--square-shadow);
+  transition: box-shadow 0.21s, border-color 0.21s;
+  will-change: box-shadow, border-color;
+  user-select: none;
+  align-items: center;
+  justify-items: center;
   position: relative;
+  overflow: visible;
+  animation: ttt-board-in 0.44s ease;
+}
+.board-ended {
+  animation: ttt-board-out 0.4s ease;
 }
 
-.App-link {
+/* Cell/Square styling */
+.ttt-square {
+  width: 100px;
+  height: 100px;
+  font-size: 2.1rem;
+  font-family: "Segoe UI", "Roboto", Arial, sans-serif;
+  background: var(--bg-board);
+  border: 1.6px solid var(--square-border);
+  border-radius: 13px;
+  color: var(--text-primary);
+  box-shadow: 0 2px 8px #e4e7f160;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  outline: none;
+  cursor: pointer;
+  transition: box-shadow 0.17s, border-color 0.17s, background 0.15s;
+  will-change: box-shadow, border, background;
+  overflow: visible;
+}
+
+.ttt-square:hover:not(.disabled):not(:disabled) {
+  background: var(--bg-square-hover);
+  border-color: var(--ttt-primary);
+  box-shadow: 0 4px 13px 0 #a3b6e244;
+}
+
+.ttt-square.disabled,
+.ttt-square:disabled {
+  cursor: not-allowed;
+  background: #f5f5f580;
   color: var(--text-secondary);
-  transition: color 0.3s ease;
+  opacity: 0.76;
 }
 
-.theme-toggle {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background-color: var(--button-bg);
-  color: var(--button-text);
+.cell-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+.cell-content.pop {
+  animation: cell-pop 0.37s cubic-bezier(.44,-0.12,.5,1.51);
+  will-change: transform, color;
+}
+.ttt-square .cell-content {
+  color: inherit;
+}
+.ttt-square .cell-content {
+  color: var(--text-primary);
+}
+.ttt-square .cell-content:empty {
+  color: transparent;
+}
+.ttt-square .cell-content:only-child {
+  font-size: 2.6rem;
+}
+.ttt-square .cell-content,
+.ttt-square .cell-content.pop {
+  transition: color 0.13s;
+}
+.ttt-square .cell-content.pop {
+  color: var(--ttt-accent);
+}
+
+/* Control Button styles */
+.ttt-controls {
+  margin-top: 1.6em;
+  display: flex;
+  flex-direction: row;
+  gap: 1.2rem;
+}
+
+.ttt-btn {
+  padding: 0.52em 1.13em 0.49em 1.13em;
+  font-size: 1.08rem;
+  font-family: "Segoe UI", "Roboto", Arial, sans-serif;
+  font-weight: 600;
+  background: var(--btn-bg);
+  color: var(--btn-text);
   border: none;
   border-radius: 8px;
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: 600;
+  box-shadow: 0 2px 8px #aabed73a;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background 0.18s, box-shadow 0.18s, transform 0.16s;
+  margin: 0 0.15em;
+  outline: none;
+  min-width: 8ch;
 }
 
-.theme-toggle:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  opacity: 0.9;
+.ttt-btn[data-variant="primary"] {
+  background: var(--btn-bg);
+}
+.ttt-btn[data-variant="primary"]:hover {
+  background: var(--btn-bg-hover);
+}
+.ttt-btn[data-variant="secondary"] {
+  background: var(--btn-bg-secondary);
+}
+.ttt-btn[data-variant="secondary"]:hover {
+  background: var(--btn-bg-secondary-hover);
+}
+.ttt-btn:active {
+  transform: translateY(2px) scale(0.98);
 }
 
-.theme-toggle:active {
-  transform: translateY(0);
+/* Footer styling */
+.ttt-footer {
+  color: var(--footer-color);
+  font-size: 0.93rem;
+  margin-top: 2.2em;
+  text-align: center;
+  letter-spacing: 0.11px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Animations */
+@keyframes cell-pop {
+  0% {
+    transform: scale(0.3) rotate(-16deg);
+    color: var(--text-secondary);
+    opacity: 0.20;
   }
-  to {
-    transform: rotate(360deg);
+  60% {
+    transform: scale(1.18) rotate(3deg);
+    color: var(--ttt-accent);
+    opacity: 0.95;
+  }
+  100% {
+    transform: scale(1.00) rotate(0deg);
+    color: var(--text-primary);
+    opacity: 1.0;
+  }
+}
+@keyframes ttt-board-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.91) translateY(20px);
+  }
+  35% {
+    opacity: 0.55;
+    transform: scale(1.07) translateY(-11px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.0) translateY(0px);
+  }
+}
+@keyframes ttt-board-out {
+  0% {
+    opacity: 1;
+    transform: scale(1.0) translateY(0px);
+  }
+  100% {
+    opacity: 0.01;
+    transform: scale(0.85) translateY(40px);
   }
 }
 
 /* Responsive design for mobile */
 @media (max-width: 768px) {
-  .theme-toggle {
-    top: 10px;
-    right: 10px;
-    padding: 8px 16px;
-    font-size: 12px;
+  .ttt-board {
+    width: 92vw;
+    height: 92vw;
+    max-width: 350px;
+    max-height: 350px;
+  }
+  .ttt-square {
+    width: 28vw;
+    height: 28vw;
+    min-width: 60px;
+    min-height: 60px;
+    font-size: 1.4rem;
+  }
+  .ttt-main {
+    padding-bottom: 3em;
+    min-height: 100vh;
+  }
+  .ttt-title {
+    font-size: 1.5rem;
   }
 }
